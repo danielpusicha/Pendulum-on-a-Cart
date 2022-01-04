@@ -108,7 +108,7 @@ agent = rlDDPGAgent(actor,critic,agentOpts);
 % *Stop training when the agent receives an average cumulative reward
 %  greater than 10 over 20 consecutive episodes. At this point, 
 %  the agent can control the swing up process.
-maxepisodes = 50;
+maxepisodes = 5000;
 maxsteps = ceil(Tf/Ts);
 trainOpts = rlTrainingOptions(...
     'MaxEpisodes',maxepisodes, ...
