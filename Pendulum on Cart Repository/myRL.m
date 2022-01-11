@@ -95,7 +95,18 @@ agentOpts.NoiseOptions.Variance = 0.3;
 agentOpts.NoiseOptions.VarianceDecayRate = 1e-5;
 
 % Then, create the DDPG agent using the specified actor representation, critic representation, and agent options.
-agent = rlDDPGAgent(actor,critic,agentOpts);
+% Set to true, to resume training from a saved agent
+resumeTraining = false;
+% Set ResetExperienceBufferBeforeTraining to false to keep experience from the previous session
+%%agentOpts.ResetExperienceBufferBeforeTraining = ~(resumeTraining);
+if resumeTraining
+    % Load the agent from the previous session
+    sprintf('- Resume training of: %s', 'SwingUpDDPG.mat');   
+    load('SwingUpDDPG.mat','agent');
+else
+    % Create a fresh new agent
+    agent = rlDDPGAgent(actor, critic, agentOpts);
+end
 
 %% Train Agent
 
@@ -108,7 +119,7 @@ agent = rlDDPGAgent(actor,critic,agentOpts);
 % *Stop training when the agent receives an average cumulative reward
 %  greater than 10 over 20 consecutive episodes. At this point, 
 %  the agent can control the swing up process.
-maxepisodes = 5000;
+maxepisodes = 10000;
 maxsteps = ceil(Tf/Ts);
 trainOpts = rlTrainingOptions(...
     'MaxEpisodes',maxepisodes, ...
