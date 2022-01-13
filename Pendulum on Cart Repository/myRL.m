@@ -133,6 +133,12 @@ trainOpts = rlTrainingOptions(...
     'StopTrainingCriteria','AverageReward',...
     'StopTrainingValue',10);
 
+% Training options for parallelization
+trainOpts.UseParallel = true;
+trainOpts.ParallelizationOptions.Mode = "async";
+trainOpts.ParallelizationOptions.DataToSendFromWorkers = "experiences";
+trainOpts.ParallelizationOptions.StepsUntilDataIsSent = 32;
+
 % Train the agent using the train function. Training is a computationally intensive process 
 % that takes several minutes to complete. To save time while running this example, 
 % load a pretrained agent by setting doTraining to false. To train the agent yourself, 
