@@ -119,11 +119,11 @@ end
 % *Stop training when the agent receives an average cumulative reward
 %  greater than 10 over 20 consecutive episodes. At this point, 
 %  the agent can control the swing up process.
-maxepisodes = 10000;
+maxepisodes = 5000;
 maxsteps = ceil(Tf/Ts);
-if exist ./'Pendulum on Cart Repository'/'RL Agents' == 0
-    mkdir ./'Pendulum on Cart Repository'/'RL Agents'
-end
+% if exist ./'Pendulum on Cart Repository'/'RL Agents' == 0
+%     mkdir ./'Pendulum on Cart Repository'/'RL Agents'
+% end
 agentdir = pwd + "/Pendulum on Cart Repository" + "/RL Agents";
 trainOpts = rlTrainingOptions(...
     'MaxEpisodes',maxepisodes, ...
@@ -135,19 +135,19 @@ trainOpts = rlTrainingOptions(...
     'Verbose',true, ...
     'Plots','training-progress',...
     'StopTrainingCriteria','AverageReward',...
-    'StopTrainingValue',10);
+    'StopTrainingValue',1.0000e+20);
 
-% Training options for parallelization
-trainOpts.UseParallel = true;
-trainOpts.ParallelizationOptions.Mode = "async";
-trainOpts.ParallelizationOptions.DataToSendFromWorkers = "experiences";
-trainOpts.ParallelizationOptions.StepsUntilDataIsSent = 32;
+% % Training options for parallelization
+% trainOpts.UseParallel = true;
+% trainOpts.ParallelizationOptions.Mode = "async";
+% trainOpts.ParallelizationOptions.DataToSendFromWorkers = "experiences";
+% trainOpts.ParallelizationOptions.StepsUntilDataIsSent = 32;
 
 % Train the agent using the train function. Training is a computationally intensive process 
 % that takes several minutes to complete. To save time while running this example, 
 % load a pretrained agent by setting doTraining to false. To train the agent yourself, 
 % set doTraining to true.
-doTraining = true;
+doTraining = false;
 
 if doTraining
     % set the status of the Test Switch: 1 -> RL Modus
@@ -155,11 +155,11 @@ if doTraining
     % Train the agent.
     trainingStats = train(agent,env,trainOpts);
     %save ('SwingUpDDPG.mat','agent')
-    save ('Pendulum on Cart Repository/RL Agents/SwingUpDDPG.mat','agent')
+    save ('SwingUpDDPG.mat','agent')
     % currentfig = findall(groot,'Type','Figure');
     % savefig(currentfig,'training.fig')
 else
     % Load the pretrained agent for the example.
     %load('SwingUpDDPG.mat','agent')
-    load('Pendulum on Cart Repository/RL Agents/SwingUpDDPG.mat','agent')
+    load('SwingUpDDPG.mat','saved_agent')
 end
